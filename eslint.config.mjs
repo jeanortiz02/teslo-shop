@@ -18,6 +18,7 @@ const eslintConfig = [
     },
     rules: {
       "react/display-name": "off",
+      "import/no-anonymous-default-export": ["off"],
     },
   },
 ];
