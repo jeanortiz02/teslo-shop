@@ -1,5 +1,5 @@
 
-import { ProductSliceshow, SizeSelector } from "@/components";
+import { ProductMobileSliceshow, ProductSliceshow, SizeSelector } from "@/components";
 import QuantitySelector from "@/components/product/quantity-selector/QuantitySelector";
 import { titleFont } from "@/config/fonts";
 import { initialData } from "@/seed/seed";
@@ -26,9 +26,13 @@ export default async function({ params }: Props) {
   return (
     <div className="mt-5 mb-20 grid grid-cols-1 md:grid-cols-3 gap-3">
 
-      {/* SliceShow */}
       <div className="col-span-1 md:col-span-2 ">
-        <ProductSliceshow title={product.title} images={product.images}/>
+
+      {/* Mobile SliceShow */}  
+        <ProductMobileSliceshow title={product.title} images={product.images} className="block md:hidden"/>
+
+      {/* Desktop SliceShow */}
+        <ProductSliceshow title={product.title} images={product.images} className="hidden md:block"/>
       </div>
 
 
