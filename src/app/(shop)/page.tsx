@@ -1,22 +1,23 @@
+
+export const revalidate = 60 // 👈 Revalida cada 60 segundos
 import { getPaginatedProductsWithImage } from "@/action";
-import { ProductGrid, Title } from "@/components";
+import { Pagination, ProductGrid, Title } from "@/components";
 import { redirect } from "next/navigation";
 // import { initialData } from "@/seed/seed";
 
 // const products = initialData.products;
 
 interface Props {
-  searchParams?: {
-    page?: string;
-  }
+  searchParams?: Promise<{ page?: string}> 
 }
 
 export default async function Home( { searchParams }: Props ) {
 
    const page = Number((await searchParams)?.page) || 1;
   
-  const {products} = await getPaginatedProductsWithImage({page});
-  
+  const {products, totalPages} = await getPaginatedProductsWithImage({page});
+
+
   if ( products.length === 0 ) {
     redirect(`/`);
   }
@@ -25,6 +26,8 @@ export default async function Home( { searchParams }: Props ) {
       <Title title="Tienda" subtitle="Todos los productos" className="mb-2"/>
 
       <ProductGrid products={products}/>
+
+      <Pagination totalPages={totalPages}/>
     </>
   );
 }

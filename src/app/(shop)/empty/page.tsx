@@ -3,7 +3,7 @@ import { IoCartOutline } from "react-icons/io5"
 
 
 
-export default function() {
+export default function EmptyPage() {
   return (
     <div className="flex justify-center items-center h-[800px]">
 

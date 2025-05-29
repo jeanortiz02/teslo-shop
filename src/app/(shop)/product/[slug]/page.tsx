@@ -1,4 +1,4 @@
-
+export const revalidate = 10 // 👈 Revalida cada 60 segundos
 import { ProductMobileSliceshow, ProductSliceshow, SizeSelector } from "@/components";
 import QuantitySelector from "@/components/product/quantity-selector/QuantitySelector";
 import { titleFont } from "@/config/fonts";
@@ -6,13 +6,11 @@ import { initialData } from "@/seed/seed";
 import { notFound } from "next/navigation";
 
 interface Props {
-  params: {
-    slug: string;
-  }
+  params: Promise<{ slug: string}>
 }
 
 
-export default async function({ params }: Props) {
+export default async function ProductBySlugPage({ params }: Props) {
 
   const { slug } = await params;
   const product = initialData.products.find( (product) => product.slug === slug);

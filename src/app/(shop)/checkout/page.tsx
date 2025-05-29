@@ -1,5 +1,4 @@
 import { Title } from "@/components";
-import QuantitySelector from "@/components/product/quantity-selector/QuantitySelector";
 import { initialData } from "@/seed/seed";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +11,7 @@ const productsInCart = [
 ]
 
 
-export default function() {
+export default function CheckoutPage() {
   return (
     <div className="flex justify-center items-center mb-72 px-10 sm:px-0">
 
