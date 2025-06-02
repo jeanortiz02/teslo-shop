@@ -37,7 +37,7 @@ export const ProductSliceshow = ({ images, title, className } : Props) => {
         autoplay={{ delay: 2500 }}
         thumbs={{ swiper: thumbsSwiper }}
         modules={[FreeMode, Navigation, Thumbs, Autoplay]}
-        className="mySwiper2"
+        className="mySwiper2 "
       >
         {
             images.map ( image => (

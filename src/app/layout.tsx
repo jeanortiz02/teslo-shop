@@ -6,7 +6,10 @@ import "./globals.css";
 
 
 export const metadata: Metadata = {
-  title: "Teslo Shop | Is a E-Commerce",
+  title: {
+    template: '%s - Teslo | Shop',
+    default: 'Home - Teslo | Shop '
+  },
   description: "Is a E-Commerce",
 };
 
