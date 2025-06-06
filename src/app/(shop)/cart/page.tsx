@@ -1,15 +1,7 @@
 import { Title } from "@/components";
-import QuantitySelector from "@/components/product/quantity-selector/QuantitySelector";
-import { initialData } from "@/seed/seed";
-import Image from "next/image";
 import Link from "next/link";
-
-
-const productsInCart = [
-  initialData.products[0],
-  initialData.products[1],
-  initialData.products[2],
-]
+import { ProductsInCart } from "./ui/ProductsInCart";
+import { OrderSummary } from "./ui/OrderSummary";
 
 
 export default function CartPage() {
@@ -32,29 +24,7 @@ export default function CartPage() {
           
 
           {/* Items del carrito */}
-          {
-            productsInCart.map(product => (
-              <div key={product.slug} className="flex mb-5">
-                <Image
-                  src={`/products/${product.images[0]}`}
-                  alt={product.title}
-                  width={100}
-                  height={100}
-                  className="mr-5 rounded"
-                />
-
-                <div>
-                  <p>{product.title}</p>
-                  <p>{product.price}</p>
-                  <QuantitySelector quantity={3}/>
-
-                  <button className="underline mt-3 hover:cursor-pointer">
-                    Remover
-                  </button>
-                </div>
-              </div>
-            ))
-          }
+          <ProductsInCart/>
           </div>
 
           {/* Order Summary */}
@@ -62,19 +32,8 @@ export default function CartPage() {
           <div className="bg-white shadow-xl p-7 rounded-xl h-fit">
             <h2 className="text-2xl mb-2">Resumen de la compra</h2>
 
-            <div className="grid grid-cols-2 gap-2">
-              <span>No. Productos</span>
-              <span className="text-right">{`3 Artículos`}</span>
-
-
-              <span>Subtotal</span>
-              <span className="text-right">{`DOP $100.00`}</span>
-
-              <span>Impuestos (18%)</span>
-              <span className="text-right">{`DOP $18.00`}</span>
-
-              <span className="mt-5 text-2xl">Total:</span>
-              <span className="text-right mt-5 text-2xl">{`DOP $118.00`}</span>
+            
+              <OrderSummary/>
             </div>
 
             <div>
@@ -93,8 +52,5 @@ export default function CartPage() {
         </div>
 
       </div>
-
-
-    </div>
   );
 }

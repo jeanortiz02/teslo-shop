@@ -1,10 +1,11 @@
 export const revalidate = 604800 // 👈 Revalida cada 60 segundos
 import { getProductBySlug } from "@/action";
-import { ProductMobileSliceshow, ProductSliceshow, SizeSelector, StockLabel } from "@/components";
-import QuantitySelector from "@/components/product/quantity-selector/QuantitySelector";
+import { ProductMobileSliceshow, ProductSliceshow, StockLabel } from "@/components";
 import { titleFont } from "@/config/fonts";
 import { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
+import { AddToCart } from "./AddToCart";
+import { currencyFormat } from "@/utils";
 
 interface Props {
   params: Promise<{ slug: string}>
@@ -59,16 +60,9 @@ export default async function ProductBySlugPage({ params }: Props) {
         <StockLabel slug={product.slug}/>
         <h1 className={ `${titleFont.className } antialiased font-bold text-lg`}>{product.title}</h1>
 
-        <p className="text-lg mb-5">${ product.price}</p>
+        <p className="text-lg mb-5">{ currencyFormat(product.price)}</p>
 
-        {/* Selector de tallas */}
-        <SizeSelector selectedSize={ product.sizes[0]} availableSizes={product.sizes} />
-
-        {/* Selector de cantidad */}
-        <QuantitySelector quantity={5} />
-
-        {/* Botton de agregar */}
-        <button className="btn-primary my-5">Agregar al carrito </button>
+        <AddToCart product={product}/>
 
 
         {/* Descripcion */}
