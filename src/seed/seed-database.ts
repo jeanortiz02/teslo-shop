@@ -3,14 +3,21 @@ import { initialData } from "./seed";
 
 async function Main() {
 
+    await prisma.user.deleteMany({});
     await prisma.productImage.deleteMany({});
     await prisma.product.deleteMany({});
     await prisma.category.deleteMany({});
     // Eliminar datos existentes
 
+    const { products, users, categories } = initialData;
+
+
+    await prisma.user.createMany({
+        data: users
+    });
 
     // Insertar Cateogrias
-    const categoriesData = initialData.categories.map( category => ({ name: category}));
+    const categoriesData = categories.map( category => ({ name: category}));
     await prisma.category.createMany({
         data: categoriesData,
         skipDuplicates: true
@@ -26,7 +33,6 @@ async function Main() {
 
     // console.log(categoriesMap);
 
-    const { products } = initialData;
     // Products 
     // const {images, type, ...product1} = initialData.products[0];
 
