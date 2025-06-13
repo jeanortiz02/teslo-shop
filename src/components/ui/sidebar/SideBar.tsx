@@ -1,7 +1,9 @@
 "use client";
+import { logout } from "@/action";
 import { useUiStore } from "@/store";
-import Link from "next/link";
 import clsx from "clsx";
+import { useSession } from "next-auth/react";
+import Link from "next/link";
 import {
   IoCloseOutline,
   IoLogInOutline,
@@ -14,37 +16,41 @@ import {
 } from "react-icons/io5";
 
 export const SideBar = () => {
+  const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
+  const closeSideMenu = useUiStore((state) => state.closeSideMenu);
 
+  const { data: session } = useSession();
+  const isAuthenticated = !!session?.user;
+  
 
-    const isSideMenuOpen = useUiStore( state => state.isSideMenuOpen);
-    const closeSideMenu = useUiStore( state => state.closeSideMenu);
+  const logoutUser = () => {
+    logout();
+    closeSideMenu();
+  };
 
   return (
     <div>
-
-        {/* Background black */}
-        {
-            isSideMenuOpen && (
-                <div className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30" />
-            )
-        }
+      {/* Background black */}
+      {isSideMenuOpen && (
+        <div className="fixed top-0 left-0 w-screen h-screen z-10 bg-black opacity-30" />
+      )}
 
       {/* Background blur */}
-      {
-        isSideMenuOpen && (
-            <div
-            onClick={ () => closeSideMenu()} 
-            className="fade-in fixed top-0 left-0 w-screen h-screen z-10 backdrop-blur-sm backdrop-filter" />
-        )
-      }
+      {isSideMenuOpen && (
+        <div
+          onClick={() => closeSideMenu()}
+          className="fade-in fixed top-0 left-0 w-screen h-screen z-10 backdrop-blur-sm backdrop-filter"
+        />
+      )}
 
       {/*  SideMenu */}
       <nav
-        className={
-            clsx("fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300 overflow-auto", {
-                "translate-x-full" : !isSideMenuOpen
-            })
-        }
+        className={clsx(
+          "fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300 overflow-auto",
+          {
+            "translate-x-full": !isSideMenuOpen,
+          }
+        )}
       >
         <IoCloseOutline
           size={50}
@@ -65,7 +71,8 @@ export const SideBar = () => {
         {/* Menu */}
 
         <Link
-          href="/"
+          href="/profile"
+          onClick={() => closeSideMenu()}
           className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
         >
           <IoPersonOutline size={30} />
@@ -80,21 +87,26 @@ export const SideBar = () => {
           <span className="ml-3 text-xl">Órdenes</span>
         </Link>
 
-        <Link
-          href="/"
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoLogInOutline size={30} />
-          <span className="ml-3 text-xl">Ingresar</span>
-        </Link>
+        {isAuthenticated && (
+          <button
+            onClick={() => logoutUser()}
+            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all w-full"
+          >
+            <IoLogOutOutline size={30} />
+            <span className="ml-3 text-xl">Salir</span>
+          </button>
+        )}
 
-        <Link
-          href="/"
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoLogOutOutline size={30} />
-          <span className="ml-3 text-xl">Salir</span>
-        </Link>
+        {!isAuthenticated && (
+          <Link
+            href="/auth/login"
+            onClick={() => closeSideMenu()}
+            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+          >
+            <IoLogInOutline size={30} />
+            <span className="ml-3 text-xl">Ingresar</span>
+          </Link>
+        )}
 
         {/* Line separator */}
 
@@ -116,7 +128,6 @@ export const SideBar = () => {
           <span className="ml-3 text-xl">Órdenes</span>
         </Link>
 
-
         <Link
           href="/"
           className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
@@ -124,10 +135,6 @@ export const SideBar = () => {
           <IoPeopleOutline size={30} />
           <span className="ml-3 text-xl">Usuarios</span>
         </Link>
-
-        
-
-
       </nav>
     </div>
   );

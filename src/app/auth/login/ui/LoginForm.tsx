@@ -1,18 +1,26 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import { authenticate } from "@/action";
 import Link from "next/link";
 import { IoInformationOutline } from "react-icons/io5";
 import clsx from "clsx";
+import { useFormStatus } from "react-dom";
+import { useRouter } from "next/navigation";
 
 export const LoginForm = () => {
+  // const [state, dispatch] = useActionState(authenticate, undefined);
   // const [state, dispatch, errorMessage, ] = useActionState(authenticate, undefined);
-  const [errorMessage, formAction, isPending] = useActionState(
-    authenticate,
-    undefined
-  );
-  // console.log({ state });
+  const router = useRouter();
+  const [errorMessage, formAction, isPending] = useActionState(authenticate, undefined); 
+
+  console.log({ errorMessage});
+    useEffect(() => {
+      if (errorMessage === 'success') {
+        // Redireccionar
+        router.replace('/');
+      }
+    }, [errorMessage]);
 
   return (
     <form action={formAction} className="flex flex-col">
@@ -30,12 +38,17 @@ export const LoginForm = () => {
         name="password"
       />
 
-      {errorMessage && (
+      {errorMessage == 'CredentialsSignin' && (
         <div className="mb-2 flex flex-row">
           <IoInformationOutline className="h-5 w-5 text-red-500" />
           <p className="text-sm text-red-500">Credenciales incorrectas</p>
         </div>
       )}
+
+
+      {/* <LoginButton/> */}
+
+
       <button
         type="submit"
         className={clsx({
@@ -60,3 +73,20 @@ export const LoginForm = () => {
     </form>
   );
 };
+
+function LoginButton() {
+  const { pending } = useFormStatus();
+
+  return (
+    <button 
+      type="submit" 
+      className={ clsx({
+        "btn-primary": !pending,
+        "btn-disabled": pending
+      })}
+      disabled={ pending }
+      >
+      Ingresar
+    </button>
+  );
+}
