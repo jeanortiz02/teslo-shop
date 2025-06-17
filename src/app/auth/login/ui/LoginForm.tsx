@@ -1,12 +1,12 @@
 "use client";
 
-import { useActionState, useEffect } from "react";
 import { authenticate } from "@/action";
-import Link from "next/link";
-import { IoInformationOutline } from "react-icons/io5";
 import clsx from "clsx";
-import { useFormStatus } from "react-dom";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useActionState, useEffect } from "react";
+import { useFormStatus } from "react-dom";
+import { IoInformationOutline } from "react-icons/io5";
 
 export const LoginForm = () => {
   // const [state, dispatch] = useActionState(authenticate, undefined);
@@ -18,7 +18,7 @@ export const LoginForm = () => {
     useEffect(() => {
       if (errorMessage === 'success') {
         // Redireccionar
-        router.replace('/');
+        window.location.replace('/');
       }
     }, [errorMessage]);
 

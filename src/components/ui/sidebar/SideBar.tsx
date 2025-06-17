@@ -8,23 +8,23 @@ import {
   IoCloseOutline,
   IoLogInOutline,
   IoLogOutOutline,
-  IoPeopleOutline,
   IoPersonOutline,
   IoSearchOutline,
-  IoShirtOutline,
   IoTicketOutline,
 } from "react-icons/io5";
+import { AdminSidebar } from "./AdminSidebar";
 
 export const SideBar = () => {
   const isSideMenuOpen = useUiStore((state) => state.isSideMenuOpen);
   const closeSideMenu = useUiStore((state) => state.closeSideMenu);
 
-  const { data: session } = useSession();
-  const isAuthenticated = !!session?.user;
-  
+  const { data: session, status } = useSession();
+  const isAuthenticated = status === "authenticated";
+  const isAdmin = session?.user.role === "admin";
 
-  const logoutUser = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
+    window.location.replace("/");
     closeSideMenu();
   };
 
@@ -45,6 +45,7 @@ export const SideBar = () => {
 
       {/*  SideMenu */}
       <nav
+        key={`${isAuthenticated}-${isAdmin}`}
         className={clsx(
           "fixed p-5 right-0 top-0 w-[500px] h-screen bg-white z-20 shadow-2xl transform transition-all duration-300 overflow-auto",
           {
@@ -70,31 +71,33 @@ export const SideBar = () => {
 
         {/* Menu */}
 
-        <Link
-          href="/profile"
-          onClick={() => closeSideMenu()}
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoPersonOutline size={30} />
-          <span className="ml-3 text-xl">Perfil</span>
-        </Link>
-
-        <Link
-          href="/"
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoTicketOutline size={30} />
-          <span className="ml-3 text-xl">Órdenes</span>
-        </Link>
-
         {isAuthenticated && (
-          <button
-            onClick={() => logoutUser()}
-            className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all w-full"
-          >
-            <IoLogOutOutline size={30} />
-            <span className="ml-3 text-xl">Salir</span>
-          </button>
+          <>
+            <Link
+              href="/profile"
+              onClick={() => closeSideMenu()}
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            >
+              <IoPersonOutline size={30} />
+              <span className="ml-3 text-xl">Perfil</span>
+            </Link>
+
+            <Link
+              href="/"
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
+            >
+              <IoTicketOutline size={30} />
+              <span className="ml-3 text-xl">Órdenes</span>
+            </Link>
+
+            <button
+              onClick={() => handleLogout()}
+              className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all w-full"
+            >
+              <IoLogOutOutline size={30} />
+              <span className="ml-3 text-xl">Salir</span>
+            </button>
+          </>
         )}
 
         {!isAuthenticated && (
@@ -110,31 +113,12 @@ export const SideBar = () => {
 
         {/* Line separator */}
 
-        <div className="w-full h-px bg-gray-200 my-10" />
-
-        <Link
-          href="/"
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoShirtOutline size={30} />
-          <span className="ml-3 text-xl">Productos</span>
-        </Link>
-
-        <Link
-          href="/"
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoTicketOutline size={30} />
-          <span className="ml-3 text-xl">Órdenes</span>
-        </Link>
-
-        <Link
-          href="/"
-          className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
-        >
-          <IoPeopleOutline size={30} />
-          <span className="ml-3 text-xl">Usuarios</span>
-        </Link>
+        {isAuthenticated && isAdmin && (
+          <>
+            <div className="w-full h-px bg-gray-200 my-10" />
+            <AdminSidebar />
+          </>
+        )}
       </nav>
     </div>
   );
