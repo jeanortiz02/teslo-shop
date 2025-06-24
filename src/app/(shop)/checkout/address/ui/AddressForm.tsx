@@ -54,10 +54,10 @@ export const AddressForm = ( { countries, useStoredAddress } : Props) => {
   
 
 const onSubmit = async( data : FormInpus)=> {
-      console.log( {data} );
+      // console.log( {data} );
 
-      setAddressStore(data);
       const { rememberAddress, ...restAddress } = data;
+      setAddressStore(restAddress);
 
       if ( data.rememberAddress) {
         // TODO: Server Actions

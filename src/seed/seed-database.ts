@@ -3,6 +3,10 @@ import { initialData } from "./seed";
 import { countries } from "./seed-countries";
 
 async function Main() {
+    console.log("Eliminando datos existentes...");
+    await prisma.orderAddress.deleteMany({});
+    await prisma.orderItem.deleteMany({});
+    await prisma.order.deleteMany({});
 
     await prisma.userAddress.deleteMany({});
     await prisma.user.deleteMany({});
