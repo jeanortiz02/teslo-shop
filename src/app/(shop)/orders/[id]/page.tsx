@@ -1,6 +1,6 @@
 
 import { getOrderById } from "@/action";
-import { PaypalButton, Title } from "@/components";
+import { OrderStatus, PaypalButton, Title } from "@/components";
 import { initialData } from "@/seed/seed";
 import { currencyFormat } from "@/utils";
 import clsx from "clsx";
@@ -41,21 +41,7 @@ export default async function OrderbyPage({ params }: Props) {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {/* Carrito */}
           <div className="flex flex-col mt-5">
-            <div
-              className={clsx(
-                "flex items-center rounded-lg py-2 px-3.5 text-xs font-bold text-white mb-5",
-                {
-                  "bg-red-500": !order?.isPaid,
-                  "bg-green-700": order?.isPaid,
-                }
-              )}
-            >
-              <IoCardOutline size={30} />
-              {/* <span className="mx-2">Pendiente de pago</span> */}
-              <span className="mx-2">
-                {order?.isPaid ? "Pagada" : "Pendiente de pago"}
-              </span>
-            </div>
+            <OrderStatus isPaid={order!.isPaid ?? false} />
 
             {/* Items del carrito */}
             {order!.OrderItem.map((items) => (
@@ -74,7 +60,7 @@ export default async function OrderbyPage({ params }: Props) {
                 <div>
                   <p>{items.product.title}</p>
                   <p>
-                    DOP ${items.price} X {items.quantity}
+                     ${items.price} X {items.quantity}
                   </p>
                   <p className="font-bold">
                     Subtotal: {currencyFormat(items.price * items.quantity)}
@@ -130,10 +116,20 @@ export default async function OrderbyPage({ params }: Props) {
             </div>
 
             <div className="mt-5 mb-2 w-full">
-              <PaypalButton
-                amount={order!.total}
-                orderId={order!.id}
-              />
+
+              {
+                order?.isPaid ? (
+                  <OrderStatus isPaid={order.isPaid ?? false} />
+                ) : (
+                  <div className="relative z-0">
+                    <PaypalButton
+                      amount={order!.total}
+                      orderId={order!.id}
+                    />
+                  </div>
+                  
+                )
+              }
             </div>
           </div>
         </div>

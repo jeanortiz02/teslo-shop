@@ -1,7 +1,8 @@
 'use client'
 
 import { PayPalButtons, usePayPalScriptReducer } from "@paypal/react-paypal-js"
-import { CreateOrderData, CreateOrderActions } from "@paypal/paypal-js"
+import { CreateOrderData, CreateOrderActions, OnApproveData, OnApproveActions } from "@paypal/paypal-js"
+import { paypalCheckPayment, setTransactionId } from "@/action"
 
 
 
@@ -9,7 +10,6 @@ interface Props {
   orderId: string
   amount : number
 }
-
 
 
 export const PaypalButton = ( { orderId, amount } : Props) => {
@@ -34,7 +34,7 @@ export const PaypalButton = ( { orderId, amount } : Props) => {
       const transactionId = actions.order.create({
           purchase_units: [
             {
-              // invoice_id: '1',
+              invoice_id: orderId,
               amount: {
                 currency_code: 'USD',
                 value: `${roundedAmount}`
@@ -44,16 +44,34 @@ export const PaypalButton = ( { orderId, amount } : Props) => {
           intent: 'CAPTURE',
         })  
 
-        console.log({ transactionId });
+        // console.log({ transactionId });
+
+        const transactionToString = (await transactionId).toString();
+
+        // TODO: Send transactionId to server
+        const { ok} = await setTransactionId( transactionToString, orderId);
+        if ( !ok ) {
+          throw new Error('No se pudo actualizar el pago de la orden');
+        }
 
       return transactionId;
+    }
+
+    const onApprove = async ( data : OnApproveData, actions : OnApproveActions) => {
+
+      // console.log('onApprove');
+      const details = await actions.order?.capture();
+
+      if ( !details ) return ;
+
+    await paypalCheckPayment( details.id! );
     }
 
 
   return (
     <PayPalButtons 
       createOrder={ createOrder }
-      // onApprove={}
+      onApprove={ onApprove }
     />
   )
 }

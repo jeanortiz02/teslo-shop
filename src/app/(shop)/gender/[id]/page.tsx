@@ -34,7 +34,7 @@ export default async function GenderByPage({ params } : Props) {
       <Title title={`Articulos de ${label[id]}`} subtitle={`Todos los productos`} className="mb-2"/>
 
       <ProductGrid products={productsFilteredByGender}/>
-      <Pagination totalPages={totalPages}/>
+      <Pagination totalPages={totalPages - 1}/>
     </>
   );
 }
