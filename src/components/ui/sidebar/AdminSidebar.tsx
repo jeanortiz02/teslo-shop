@@ -10,8 +10,10 @@ interface Props {
 export const AdminSidebar = ( { closeSideMenu }: Props ) => {
   return (
     <>
+
+    <h1 className="text-2xl mb-5 font-bold ml-4">Eres Administrador</h1>
       <Link
-        href="/"
+        href="/admin/products"
         onClick={() => closeSideMenu()}
         className="flex items-center mt-10 p-2 hover:bg-gray-100 rounded transition-all"
       >

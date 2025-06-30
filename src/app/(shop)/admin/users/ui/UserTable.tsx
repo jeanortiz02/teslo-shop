@@ -1,5 +1,6 @@
 'use client'
 
+import { changeUserRole } from "@/action";
 import { User } from "@/interfaces";
 
 interface Props {
@@ -47,7 +48,7 @@ export const UserTable = ( { users }: Props ) => {
               <select 
                 className="text-sm text-gray-900 w-full p-2 bg-gray-100 rounded" 
                 value={ user.role }
-                onChange={ (e) => console.log(e.target.value) }
+                onChange={ (e) => changeUserRole(user.id, e.target.value) }
               
               >
                 <option value="admin">Admin</option>
